@@ -8,6 +8,7 @@ with open("/Users/thdtjdals__/Desktop/데이터 분석 2ᄋ
         for inStr in inFp:
             inStr = inStr.strip()
             row_list = inStr.split(',')
+            # replace 함수로 .을 /로 변경한다는 뜻
             row_list[-1] = row_list[-1].replace('.', '/')
             height_str = "{0:.2f}".format(int(row_list[-2]))
             row_list[-2] = height_str
