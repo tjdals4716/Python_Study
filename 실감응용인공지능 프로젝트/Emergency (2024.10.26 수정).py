@@ -90,7 +90,7 @@ def get_location_address(latitude, longitude):
                         break
 
             if stage1 and stage2:
-                print(f"현재 사용자 위치 : {stage1} {stage2}")
+                print(f"찾은 주소: {stage1} {stage2}")
                 return stage1, stage2
             else:
                 print("필요한 주소 구성 요소를 찾지 못했습니다.")
@@ -99,7 +99,7 @@ def get_location_address(latitude, longitude):
             print("주소 결과가 없거나 API 응답이 OK가 아닙니다.")
             return None, None
     else:
-        print("Google Geocoding API 호출 실패. 상태 코드 : ", response.status_code)
+        print("Google Geocoding API 호출 실패. 상태 코드:", response.status_code)
         return None, None
 
 # 현재 위치 정보 가져오기
@@ -135,19 +135,15 @@ if response.status_code == 200:
             # AI 프롬프트 생성
             prompt = f"""당신은 한국에서 현재 사용자의 위치에 가장 가까운 응급 의료 기관을 안내하는 AI입니다.\n
             사용자 불편 사항 : {discomfort}\n
-            우선 사용자가 입력한 불편 사항에 따라 확인하는 문장을 처음에 넣어주세요.\n
-            예를들어 사용자가 머리가 아프다고 하면 "사용자님 두통을 겪고 계시는군요" 이런식으로.\n
             사용자는 현재 한국 {stage1} {stage2}에 있으며, 위도 {latitude}, 경도 {longitude}에 위치해 있습니다.\n
             우선 현재 조회되는 위치의 시, 구, 동, 군, 구, 읍을 모두 정확히 세밀하게 알려주세요.\n
             그다음 목표는 사용자의 위치에서 가장 가까운 응급 의료 시설을 찾아 제공하는 것입니다.\n
             아래는 사용자 위치 근처에 있는 응급실 정보 목록입니다.\n
             만약에 주변에 응급실이 없다면 가까운 주변 응급실이 없다고 알려주세요.\n
-            그리고 현재 위치에서 제일 가까운 응급실을 매칭해주세요.\n
+            그리고 현재 위치에서 제일 가까운 응급실을 매칭해주세요. \n
             각 응급실에 대한 상세 정보를 참고하여, 가장 적합한 병원을 추천해주세요.\n
             중요한 세부사항에는 구급차 가용 여부와 병원의 연락처가 포함됩니다.\n
-            응급실을 추천할 때 가장 가까운 거리의 병원을 우선으로 고려해주세요.\n
-            마지막으로는 최종적으로 정리된 병원을 알려주세요.\n
-            예를 들어 최종적으로 분석된 응급실에 대해 "최종 추천 응급실 : [병원 정보들]과 함께 최종적으로 매칭된 응급실을 정리하여 알려주세요."\n\n"""
+            응급실을 추천할 때 가장 가까운 거리의 병원을 우선으로 고려해주세요.\n\n"""
 
             for item in items:
                 duty_name = item.find('dutyName').text if item.find('dutyName') is not None else "정보 없음"
