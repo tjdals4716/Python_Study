@@ -1,4 +1,6 @@
 {
     "liveServer.settings.port": 8080,
-    "liveServer.settings.root": "/Users/thdtjdals__/Desktop/Python_Study/Frontend/OlymPick 로그인.css"
+    "liveServer.settings.root": "/Users/thdtjdals__/Desktop/Python_Study/Frontend/OlymPick 로그인.css",
+    "python.terminal.activateEnvironment": true,
+    "python.envFile": "${workspaceFolder}/.env"
 }
