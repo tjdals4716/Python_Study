@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# 환경 변수에서 API 키 및 엔드포인트 가져오기
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 gemini_endpoint = os.getenv("GEMINI_ENDPOINT")
 
