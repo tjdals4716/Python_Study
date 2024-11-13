@@ -43,7 +43,7 @@ def extract_address_component(components, type_name):
     return None
 
 def get_location_address(latitude, longitude):
-    """Google Geocoding API를 사용하여 대략적인 주소(시도 및 시군구) 조회"""
+    """Google Geocoding API를 사용하여 도로명 주소까지 조회"""
     google_maps_url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={google_geocoding_key}&language=ko"
     response = requests.get(google_maps_url)
 
@@ -54,53 +54,49 @@ def get_location_address(latitude, longitude):
     if response.status_code == 200:
         location_data = response.json()
         if location_data['status'] == 'OK' and location_data['results']:
-            # 첫 번째 결과의 주소 구성요소를 확인
+
+            # 첫 번째 결과의 주소 구성요소 확인
             address_components = location_data['results'][0]['address_components']
-            
-            # 다양한 행정구역 레벨 확인
+            formatted_address = location_data['results'][0].get('formatted_address', '정보 없음')
+
+            # 시도 추출
             stage1 = (
                 extract_address_component(address_components, 'administrative_area_level_1') or
                 extract_address_component(address_components, 'locality') or
                 extract_address_component(address_components, 'sublocality_level_1')
             )
             
+            # 시군구 추출
             stage2 = (
                 extract_address_component(address_components, 'administrative_area_level_2') or
                 extract_address_component(address_components, 'sublocality_level_2') or
                 extract_address_component(address_components, 'sublocality')
             )
+            
+            # 동 추출
+            stage3 = (
+                extract_address_component(address_components, 'sublocality_level_3') or
+                extract_address_component(address_components, 'neighborhood') or
+                extract_address_component(address_components, 'premise')
+            )
 
-            # 주소를 찾지 못한 경우 다른 결과들도 확인
-            if not stage1 or not stage2:
-                for result in location_data['results'][1:]:
-                    components = result['address_components']
-                    if not stage1:
-                        stage1 = (
-                            extract_address_component(components, 'administrative_area_level_1') or
-                            extract_address_component(components, 'locality') or
-                            extract_address_component(components, 'sublocality_level_1')
-                        )
-                    if not stage2:
-                        stage2 = (
-                            extract_address_component(components, 'administrative_area_level_2') or
-                            extract_address_component(components, 'sublocality_level_2') or
-                            extract_address_component(components, 'sublocality')
-                        )
-                    if stage1 and stage2:
-                        break
+            # 도로명 주소 추출
+            road_address = formatted_address
 
-            if stage1 and stage2:
-                print(f"현재 사용자 위치 : {stage1} {stage2}")
-                return stage1, stage2
+            if stage1 and stage2 and stage3:
+                print(f"현재 사용자 위치 : {stage1} {stage2} {stage3}")
+                print(f"도로명 주소 : {road_address}")
+                return stage1, stage2, stage3, road_address
             else:
                 print("필요한 주소 구성 요소를 찾지 못했습니다.")
-                return None, None
+                return None, None, None, None
         else:
             print("주소 결과가 없거나 API 응답이 OK가 아닙니다.")
-            return None, None
+            return None, None, None, None
     else:
         print("Google Geocoding API 호출 실패. 상태 코드 : ", response.status_code)
-        return None, None
+        return None, None, None, None
+
 
 # 현재 위치 정보 가져오기
 latitude, longitude = get_current_location()
@@ -111,12 +107,14 @@ if latitude is None or longitude is None:
     longitude = float(input("현재 위치의 경도를 입력하세요 : "))
 
 # Google Geolocation API로 주소 조회
-stage1, stage2 = get_location_address(latitude, longitude)
+stage1, stage2, stage3, road_address = get_location_address(latitude, longitude)
 
 # 주소 정보가 없을 경우 수동 입력
-if not stage1 or not stage2:
+if not stage1 or not stage2 or not stage3 or not road_address:
     stage1 = input("주소 시도(STAGE1)를 입력하세요 : ")
     stage2 = input("주소 시군구(STAGE2)를 입력하세요 : ")
+    stage3 = input("주소 동(STAGE3)를 입력하세요 : ")
+    road_address = input("도로명 주소를 입력하세요 : ")
 
 # 사용자의 불편 사항 입력
 discomfort = input("어디가 불편하신가요? : ")
@@ -184,8 +182,10 @@ if response.status_code == 200:
             gemini_response = requests.post(f"{gemini_endpoint}?key={gemini_api_key}", json=data, headers=headers)
             if gemini_response.status_code == 200:
                 result = gemini_response.json()
-                print("\nAI 응답 (사용자 위치: 위도 {}, 경도 {}) : ".format(latitude, longitude))
-                print(result["candidates"][0]["content"])
+                ai_response_text = result["candidates"][0]["content"]
+                print("\nAI 응답 : ", ai_response_text)
+                # print("\nAI 응답 (사용자 위치 : 위도 {}, 경도 {}) : ".format(latitude, longitude))
+                # print(result["candidates"][0]["content"])
             else:
                 print(f"Gemini API 호출 실패 : {gemini_response.status_code}, 메시지 : {gemini_response.text}")
         else:

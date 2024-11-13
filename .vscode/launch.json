@@ -5,12 +5,78 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "StudentAverage",
+            "request": "launch",
+            "mainClass": "Java_Study.Object_Oriented_Programming.StudentAverage",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "StudentAverage_Upgrade",
+            "request": "launch",
+            "mainClass": "Java_Study.Object_Oriented_Programming.StudentAverage_Upgrade",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "Test_2024_1_1",
+            "request": "launch",
+            "mainClass": "Engineer.Test_2024_1.Test_2024_1_1",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "StudentManager",
+            "request": "launch",
+            "mainClass": "Assignment.StudentManager",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "Hello",
+            "request": "launch",
+            "mainClass": "Week2_Session1.Hello",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "SimpleProject",
+            "request": "launch",
+            "mainClass": "Week1_Session2.SimpleProject",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "MyInfoApp",
+            "request": "launch",
+            "mainClass": "Week1_Session2.openchallenge1.MyInfoApp",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "Array",
+            "request": "launch",
+            "mainClass": "Array",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "Python_Study_9c4ffd8a"
+        },
+        {
             "name": "Open test.html in Safari",
             "type": "pwa-chrome",
             "request": "launch",
             "file": "/Users/thdtjdals__/Desktop/Python_Study/데이터분석 강의 3일차/test.html",
             "runtimeExecutable": "/Applications/Safari.app/Contents/MacOS/Safari",
-            "runtimeArgs": ["--new-window", "${file}"],
+            "runtimeArgs": [
+                "--new-window",
+                "${file}"
+            ],
             "webRoot": "${workspaceFolder}"
         }
     ]

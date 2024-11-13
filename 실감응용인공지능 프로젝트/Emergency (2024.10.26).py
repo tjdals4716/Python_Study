@@ -20,8 +20,8 @@ def get_current_location():
         url = f"https://www.googleapis.com/geolocation/v1/geolocate?key={google_geolocation_key}"
         response = requests.post(url)
         
-        print(f"응답 상태 코드: {response.status_code}")
-        print(f"응답 내용: {response.text}")
+        # print(f"응답 상태 코드: {response.status_code}")
+        # print(f"응답 내용: {response.text}")
 
         if response.status_code == 200:
             location_data = response.json()
@@ -47,9 +47,9 @@ def get_location_address(latitude, longitude):
     google_maps_url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={google_geocoding_key}&language=ko"
     response = requests.get(google_maps_url)
 
-    print(f"Google Geocoding API 요청 URL: {google_maps_url}")
-    print(f"응답 상태 코드: {response.status_code}")
-    print(f"응답 내용: {response.text}")
+    # print(f"Google Geocoding API 요청 URL: {google_maps_url}")
+    # print(f"응답 상태 코드: {response.status_code}")
+    # print(f"응답 내용: {response.text}")
 
     if response.status_code == 200:
         location_data = response.json()
@@ -163,7 +163,7 @@ if response.status_code == 200:
                 응급실 주소: {dutyAddr}
                 위도: {wgs84Lat}, 경도: {wgs84Lon}\n\n"""
 
-            print("생성된 프롬프트:\n", prompt)
+            # print("생성된 프롬프트:\n", prompt)
 
             # Gemini API 요청
             headers = {"Content-Type": "application/json"}
